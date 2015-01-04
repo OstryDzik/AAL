@@ -2,8 +2,8 @@
 #define SCENA_H
 
 #include <vector>
-#include "Obszar.h"
-#include "Figura.h"
+#include "Bin.h"
+#include "Box.h"
 
 #define BOX_ALPHA 0.6
 #define GLOBAL_SCALE 0.2
@@ -20,7 +20,7 @@ typedef struct Size
 class Scena
 {
 public:
-	static void start(int argc, char** argv, Obszar* obszar);
+	static void start(int argc, char** argv, Bin* obszar, std::vector<Box*>* packResultTrivial = NULL, std::vector<Box*>* packResultLayer = NULL, std::vector<Box*>* packResultThird = NULL);
 	static void close();
 	static float* getRandomColor();
 protected:

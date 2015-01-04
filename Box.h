@@ -1,6 +1,5 @@
-#ifndef FIGURA_H
-#define FIGURA_H
-
+#ifndef BOX_H
+#define BOX_H
 // możliwe są jest 6 typów rotacji
 //
 // (obrót = zamiana współrzędnych)
@@ -12,24 +11,34 @@
 // 4: x->y, y->z, z->x
 // 5: x->z, y->x, z->y
 //
+#include <string>
+
+typedef struct pos
+{
+	int x;
+	int y;
+	int z;
+} Position;
 
 typedef enum Rotacja
 {
 	ROTATION_0, ROTATION_1, ROTATION_2, ROTATION_3, ROTATION_4, ROTATION_5
 } Rotation;
 
-class Figura
+
+class Box
 {
 public:
-	Figura(int a, int b, int c); // konstruktor
-	Figura(); // konstruktor
-	virtual ~Figura(); // destruktor
-
+	Box(int a, int b, int c, int ID); // konstruktor
+	Box(Box* box); //konstruktor kopiujący;
+	Box(); // konstruktor
+	virtual ~Box(); // destruktor
 	void setDimens(int a, int b, int c); // ustawia rozmiar
-	void printDimens(); // wyświetla rozmiar
+	std::string printBox(); // wyświetla rozmiar
 	void clearPosition();
 
 	void setPos(int x, int y, int z);
+	void setPos(Position pos);
 
 	void setRotation(Rotation rot)
 	{
@@ -51,38 +60,46 @@ public:
 		case ROTATION_5:
 			return z;
 		}
+		return -1;
 	}
 	int getY()
 	{
 		switch (actualRotation)
 		{
 		case ROTATION_0:
+			return y;
 		case ROTATION_3:
 			return y;
 		case ROTATION_1:
+			return z;
 		case ROTATION_4:
 			return z;
 		case ROTATION_2:
+			return x;
 		case ROTATION_5:
 			return x;
 		}
+		return -1;
 	}
 	int getZ()
 	{
 		switch (actualRotation)
 		{
 		case ROTATION_0:
+			return z;
 		case ROTATION_2:
 			return z;
 		case ROTATION_1:
+			return y;
 		case ROTATION_5:
 			return y;
 		case ROTATION_3:
+			return x;
 		case ROTATION_4:
 			return x;
 		}
+		return -1;
 	}
-	// przeskalowane pozycje
 	int getPosX()
 	{
 		return posX;
@@ -96,14 +113,58 @@ public:
 		return posZ;
 	}
 
+	int getVolume()
+	{
+		return volume;
+	}
+
+	int getMinSurface()
+	{
+		return minSurface;
+	}
+	int getSurface()
+	{
+		return getX()*getZ();
+	}
+	int getID()
+	{
+		return ID;
+	}
+	int getInitX()
+	{
+		return x;
+	}
+	int getInitY()
+	{
+		return y;
+	}
+	int getInitZ()
+	{
+		return z;
+	}
+	Rotation getRotation()
+	{
+		return actualRotation;
+	}
+	float* getColor()
+	{
+		return color;
+	}
+	void setColor(float* color)
+	{
+		this->color = color;
+	}
+protected:
+private:
+	int ID;
+	float* color;
 	int x, y, z; // długości boków
+	int minSurface;
 	int posX;
 	int posY;
 	int posZ;
-	float* color;
-protected:
-private:
 	Rotacja actualRotation;
+	int volume;
 };
 
-#endif // FIGURA_H
+#endif // BOX_H

@@ -14,9 +14,10 @@
 static bool g_bButtonLDown = false;
 static bool g_bButtonRDown = false;
 
-static Obszar* allObszar;
-static std::vector<Figura*>* allCubs;
+static Bin* allObszar;
+static std::vector<Box*>* allCubs;
 static int allCubsN;
+static std::vector<Box*>* solvedBoxes[3];
 
 static GLfloat rotation_y = 0.0;
 static GLfloat rotation_x = 0.0;
@@ -91,18 +92,20 @@ void RenderObjects(void)
 //			glColor3f(1.0, 0.0, 0.0);
 			glColor4f(1.0, 0.0, 0.0, 0.5);
 			glTranslatef(0.0, -1.0, 0.0);
-			rysujFigure(float(allObszar->getRozmiarX()), 1.0, float(allObszar->getRozmiarZ()));
+			rysujFigure(float(allObszar->getSizeX()), 1.0, float(allObszar->getSizeZ()));
 		glPopMatrix(); // tacka
 
 		glPushMatrix();
-			glTranslatef(-float(allObszar->getRozmiarX()>>1), 0.0, -float(allObszar->getRozmiarZ()>>1));
+			glTranslatef(-float(allObszar->getSizeX()>>1), 0.0, -float(allObszar->getSizeZ()>>1));
+			glTranslatef(0.0, 0.0, 0.0);
 			// prostopadłościany
 			for (int i = 0; i < allCubsN; i++)
 			{
-				Figura* current = allCubs->at(i);
+				Box* current = allCubs->at(i);
 				glPushMatrix();
-					glColor4f(current->color[0], current->color[1], current->color[2], BOX_ALPHA);
+					glColor4f(current->getColor()[0], current->getColor()[1], current->getColor()[2], BOX_ALPHA);
 					glTranslatef(float(current->getPosX()+(current->getX()>>1)), float(current->getPosY()+(current->getY()>>1)), float(current->getPosZ()+(current->getZ()>>1)));
+					//glTranslatef(float(current->getPosX()), float(current->getPosY()), float(current->getPosZ()));
 					rysujFigure(float(current->getX()), float(current->getY()), float(current->getZ()));
 				glPopMatrix();
 			}
@@ -217,17 +220,55 @@ void Keyboard(unsigned char key, int x, int y)
 	case 'd':
 		eye_x -= step;
 		break;
+	case '1':
+		if (solvedBoxes[0]!=NULL)
+		{
+			allCubs = solvedBoxes[0];
+			allCubsN = allCubs->size();
+			RenderObjects();
+		}
+		break;
+	case '2':
+		if (solvedBoxes[1] != NULL)
+		{
+			allCubs = solvedBoxes[1];
+			allCubsN = allCubs->size();
+			RenderObjects();
+		}
+		break;
+	case '3':
+		if (solvedBoxes[2] != NULL)
+		{
+			allCubs = solvedBoxes[2];
+			allCubsN = allCubs->size();
+			RenderObjects();
+		}
+		break;
 	}
 	glutPostRedisplay();
 }
 
-void Scena::start(int argc, char** argv, Obszar* obszar)
+void Scena::start(int argc, char** argv, Bin* obszar, std::vector<Box*>* packResultTrivial, std::vector<Box*>* packResultLayer, std::vector<Box*>* packResultThird)
 {
-	g_lightPos[0] = -obszar->getRozmiarX()*2;
-	g_lightPos[2] = -obszar->getRozmiarZ()*2;
+	g_lightPos[0] = -obszar->getSizeX()*2;
+	g_lightPos[2] = -obszar->getSizeZ()*2;
 	allObszar = obszar;
-	allCubs = obszar->getFigury();
-	allCubsN = obszar->getLiczbaFigur();
+	solvedBoxes[0] = packResultTrivial;
+	solvedBoxes[1] = packResultLayer;
+	solvedBoxes[2] = packResultThird;
+	if (solvedBoxes[0]!=NULL)
+	{
+		allCubs = solvedBoxes[0];
+	}
+	else if (solvedBoxes[1] != NULL)
+	{
+		allCubs = solvedBoxes[1];
+	}
+	else if (solvedBoxes[2] != NULL)
+	{
+		allCubs = solvedBoxes[2];
+	}
+	allCubsN = allObszar->getBoxCount();
 
 	// GLUT Window Initialization:
 	glutInit(&argc, argv);
@@ -246,9 +287,20 @@ void Scena::start(int argc, char** argv, Obszar* obszar)
 	glutMotionFunc(MouseMotion);
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
-	for (int i = 0; i < allCubsN; i++)
+	std::vector<float*> colors;
+	for (int j = 0; j < allObszar->getBoxCount(); j++)
 	{
-		allCubs->at(i)->color = Scena::getRandomColor(); // przypisanie losowych kolorów
+		colors.push_back(Scena::getRandomColor());
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		if (solvedBoxes[i] != NULL)
+		{
+			for (int j = 0; j < solvedBoxes[i]->size(); j++)
+			{
+				solvedBoxes[i]->at(j)->setColor(colors.at(solvedBoxes[i]->at(j)->getID()));
+			}
+		}	
 	}
 
 	// Turn the flow of control over to GLUT

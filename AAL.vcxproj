@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -64,15 +64,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Figura.cpp" />
+    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="FileManager.cpp" />
+    <ClCompile Include="LayerSolver.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Obszar.cpp" />
+    <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Scena.cpp" />
+    <ClCompile Include="Solver.cpp" />
+    <ClCompile Include="Space.cpp" />
+    <ClCompile Include="ThirdSolver.cpp" />
+    <ClCompile Include="TrivialSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Figura.h" />
-    <ClInclude Include="Obszar.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="Bin.h" />
+    <ClInclude Include="FileManager.h" />
+    <ClInclude Include="LayerSolver.h" />
     <ClInclude Include="Scena.h" />
+    <ClInclude Include="Solver.h" />
+    <ClInclude Include="Space.h" />
+    <ClInclude Include="ThirdSolver.h" />
+    <ClInclude Include="TrivialSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
