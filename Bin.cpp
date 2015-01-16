@@ -1,9 +1,8 @@
 /*
- * Bin.cpp
- *
- *  Created on: 23 lis 2014
- *      Author: marcin
- */
+* Autor: Filip Łęczycki
+*
+* 3D Bin Packing Problem Solver
+*/
 
 #include <stdlib.h>
 #include <algorithm>
@@ -30,7 +29,8 @@ Bin::~Bin()
 
 void Bin::generate(int N, int minA, int maxA)
 {
-	if (minA > maxA)
+    this->reset();
+    if (minA > maxA)
 	{
 		std::cout << "# Rozmiar minimalny nie może być większy od maksymalnego" << std::endl;
 		return;
@@ -76,12 +76,17 @@ void Bin::reset()
 std::string Bin::printUnsolvedBin()
 {
 	std::string bin = "Input bin size and boxes\n";
-	bin += ("Bin foot size: " + std::to_string(getSizeX()) + "," + std::to_string(getSizeZ()) + "\n");
+    bin += printSize();
 	bin += ("##################################################\n");
 	for (int i = 0; i < unplacedBoxes.size(); i++)
 	{
 		bin += unplacedBoxes.at(i)->printBox();
 	}
 	return bin;
+}
+
+std::string Bin::printSize()
+{
+    return ("Bin foot size: " + std::to_string(getSizeX()) + "," + std::to_string(getSizeZ()) + "\n");
 }
 

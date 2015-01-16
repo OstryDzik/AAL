@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #ifndef SCENA_H
 #define SCENA_H
 

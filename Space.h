@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #pragma once
 
 
@@ -7,7 +13,7 @@ typedef struct point
 	int y;
 }Point2D;
 
-
+//klasa pomocnicza, s³u¿¹ca do reprezentacji prostok¹tnego miejsca w przestrzeni
 class Space
 {
 public:

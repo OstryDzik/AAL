@@ -1,8 +1,7 @@
 /*
- * Bin.h
+ * Autor: Filip £êczycki
  *
- *  Created on: 23 lis 2014
- *      Author: marcin
+ * 3D Bin Packing Problem Solver
  */
 
 #ifndef BIN_H
@@ -27,11 +26,11 @@ public:
 	void clear(std::vector<Box*>* boxes);
 	void clearPlaced();
 	void reset();
+
 	void setSizeY(int y)
 	{
 		this->sizeY = y;
 	}
-	//gettery
 
 	int getSizeX()
 	{
@@ -70,7 +69,7 @@ public:
 	}
 
 	std::string printUnsolvedBin();
-
+    std::string printSize();
 private:
 	int sizeX, sizeZ, sizeY; // wymiary obszaru
 	int boxCount;

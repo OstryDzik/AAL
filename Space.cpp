@@ -1,3 +1,10 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
+
 #include "Space.h"
 
 
@@ -40,6 +47,7 @@ Space::Space(Point2D p1, int width, int length)
 	botRight = { p1.x + width, p1.y + length };
 	updateDimensions();
 }
+
 void Space::Update(Point2D p1, Point2D p2, Point2D p3)
 {
 	topLeft = p1;

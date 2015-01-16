@@ -1,6 +1,12 @@
+/*
+* Autor: Filip Łęczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #ifndef BOX_H
 #define BOX_H
-// możliwe są jest 6 typów rotacji
+// możliwe jest 6 typów rotacji
 //
 // (obrót = zamiana współrzędnych)
 //
@@ -34,7 +40,7 @@ public:
 	Box(); // konstruktor
 	virtual ~Box(); // destruktor
 	void setDimens(int a, int b, int c); // ustawia rozmiar
-	std::string printBox(); // wyświetla rozmiar
+	std::string printBox(); // wypisuje pozycję i rozmiar pudelka
 	void clearPosition();
 
 	void setPos(int x, int y, int z);

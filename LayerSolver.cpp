@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #include "LayerSolver.h"
 
 LayerSolver::LayerSolver(Bin* bin) : Solver(bin)
@@ -38,6 +44,32 @@ int LayerSolver::fitIntoSpace(Box* box, Space space)
 	return surfaceLeft;
 }
 
+int LayerSolver::fitIntoSpaceMaxSurface(Box* box, Space space)
+{
+    if (box->getMinSurface() > space.getSurface())
+    {
+        return -1;
+    }
+    int bestRot = ROTATION_0;
+    int surfaceLeft = -1;
+    int boxSurface = 0;
+    for (int rot = ROTATION_0; rot <= ROTATION_5; rot++)
+    {
+        box->setRotation(Rotation(rot));
+        if (box->getSurface() > boxSurface)
+        {
+            boxSurface = box->getSurface();
+            bestRot = rot;       
+        }
+    }
+    box->setRotation((Rotation)bestRot);
+    if (box->getSurface() <= space.getSurface() && box->getX() <= space.getWidth() && box->getZ() <= space.getLength())
+    {
+        surfaceLeft = space.getSurface() - box->getSurface();
+    }
+    return surfaceLeft;
+}
+
 Node* LayerSolver::insert(Box* box, Node* node)
 {
 	if (node->child[0] != NULL && node->child[1] != NULL)
@@ -55,7 +87,8 @@ Node* LayerSolver::insert(Box* box, Node* node)
 		{
 			return NULL;
 		}
-		int surfaceLeft = fitIntoSpace(box, node->space);
+		//int surfaceLeft = fitIntoSpace(box, node->space);
+        int surfaceLeft = fitIntoSpaceMaxSurface(box, node->space);
 		if (surfaceLeft==-1)
 		{
 			return NULL;
@@ -73,6 +106,7 @@ Node* LayerSolver::insert(Box* box, Node* node)
 		node->child[1]->occupied = false;
 		node->child[1]->child[0] = NULL;
 		node->child[1]->child[1] = NULL;
+
 		int dw = node->space.getWidth() - box->getX();
 		int dh = node->space.getLength() - box->getZ();
 
@@ -116,11 +150,6 @@ void LayerSolver::resetRoot()
 
 int LayerSolver::solveLayer()
 {
-	//zwraca wysokosc warstwy
-	//bierzemy po koleu klocki z unplaced, kopiujemy i próbujemy zrobic na nich insert
-	//jak insert wyjdzie, wsadzamy klocek i wywalamy z unplaced i lecimy od nowa z list¹
-	//jak ca³a lista przejdzie i ¿aden ju¿nie wejdze (same NULLE zwrocone przez insert) to zamykamy warstwê i zwracamy now¹ wysokoœæ
-	//klocki z insert wychodz¹ ju¿ dobrze ustawione
 	resetRoot(); // czysci drzewo, zaczynamy od pustej warstwy
 	int topHeight = 0;
 	for (int i = 0; i < unplacedBoxes.size(); i++)
@@ -160,19 +189,6 @@ int LayerSolver::solve()
 	return resultHeight;
 }
 
-std::string LayerSolver::printResult()
-{
-	std::string result;
-	if (!solved)
-	{
-		result = "Not solved yet";
-		return result;
-	}
-	result += "Bin solved with Layers algorithm: \n";
-	result += "Bin height: " + std::to_string(resultHeight) + "\n";
-	result += printSolvedBoxes();
-	return result;
-}
 
 std::string LayerSolver::printShortResult()
 {
@@ -183,6 +199,7 @@ std::string LayerSolver::printShortResult()
 		return result;
 	}
 	result += "Bin solved with Layer algorithm: \n";
+    result += "Elapsed time: " + std::to_string(elapsedTime) + "\n";
 	result += "Bin height: " + std::to_string(resultHeight) +"\n";
 	return result;
 }

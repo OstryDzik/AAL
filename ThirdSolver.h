@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #ifndef THIRDSOLVER_H
 #define THIRDSOLVER_H
 
@@ -9,7 +15,6 @@ public:
 	ThirdSolver(Bin* bin);
 	~ThirdSolver();
 	int solve();
-	std::string printResult();
 	std::string printShortResult();
 };
 

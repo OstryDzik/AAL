@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £Íczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #include <iostream>
 #include <GL/freeglut.h>
 //#include <GL/glut.h>
@@ -23,6 +29,8 @@ static GLfloat rotation_y = 0.0;
 static GLfloat rotation_x = 0.0;
 static GLfloat eye_x = 0.0;
 static GLfloat eye_y = 0.0;
+static GLfloat origin_x = 0.0;
+static GLfloat origin_y = 0.0;
 static GLfloat g_fViewDistance = 3 * VIEWING_DISTANCE_MIN;
 static GLfloat g_nearPlane = 1;
 static GLfloat g_farPlane = 1000;
@@ -32,36 +40,62 @@ static int g_yClick = 0;
 static int g_xClick = 0;
 static float g_lightPos[4] = { 10, 10, -100, 1 };  // Position of light
 
-void DrawSurface(float sizeX, float sizeY)
+void drawCube(float posX, float posY, float posZ, float x, float y, float z)
 {
-	sizeX /= 2.0;
-	sizeY /= 2.0;
-
-	glPushMatrix();
-
-	glBegin(GL_QUADS);
-	glNormal3d(0, 1, 0);
-	glVertex3f(sizeX, sizeY, 0);    // Top Right Of The Quad (Top)
-	glVertex3f(-sizeX, sizeY, 0);    // Top Left Of The Quad (Top)
-	glVertex3f(-sizeX, sizeY, 0);    // Bottom Left Of The Quad (Top)
-	glVertex3f(sizeX, sizeY, 0);    // Bottom Right Of The Quad (Top)
-	glEnd();
-
-	glPopMatrix();
+    glPushMatrix();
+    glBegin(GL_QUADS); //bot
+    glNormal3f(0.0f, -1.0f, 0.0f);
+    glVertex3f(posX, posY, posZ);
+    glVertex3f(posX, posY, posZ + z);
+    glVertex3f(posX + x, posY, posZ + z);
+    glEnd();
+    glBegin(GL_QUADS); //top
+    glNormal3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(posX + x, posY + y, posZ);
+    glVertex3f(posX, posY + y, posZ);
+    glVertex3f(posX, posY + y, posZ + z);
+    glVertex3f(posX + x, posY + y, posZ + z);
+    glEnd();
+    glBegin(GL_QUADS); //left
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glVertex3f(posX, posY + y, posZ + z);
+    glVertex3f(posX, posY + y, posZ);
+    glVertex3f(posX, posY, posZ);
+    glVertex3f(posX, posY, posZ + z);
+    glEnd();
+    glBegin(GL_QUADS); //front
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(posX + x, posY + y, posZ + z);
+    glVertex3f(posX, posY + y, posZ + z);
+    glVertex3f(posX, posY, posZ + z);
+    glVertex3f(posX + x, posY, posZ + z);
+    glEnd();
+    glBegin(GL_QUADS); //right
+    glNormal3f(1.0f, 0.0f, 0.0f);
+    glVertex3f(posX + x, posY + y, posZ + z);
+    glVertex3f(posX + x, posY + y, posZ);
+    glVertex3f(posX + x, posY, posZ);
+    glVertex3f(posX + x, posY, posZ + z);
+    glEnd();
+    glBegin(GL_QUADS); //back
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glVertex3f(posX + x, posY + y, posZ);
+    glVertex3f(posX, posY + y, posZ);
+    glVertex3f(posX, posY, posZ);
+    glVertex3f(posX + x, posY, posZ);
+    glEnd();
+    glPopMatrix();
 }
 
-void rysujFigure(float sizeX, float sizeY, float sizeZ)
+void drawCube(Box* box)
 {
-//	sizeX /= 2.0;
-//	sizeY /= 2.0;
-//	sizeZ /= 2.0;
-
-	glPushMatrix();
-
-	glScalef(sizeX, sizeY, sizeZ);
-	glutSolidCube(1.0);
-
-	glPopMatrix();
+    int posX = box->getPosX();
+    int posY = box->getPosY();
+    int posZ = box->getPosZ();
+    int x = box->getX();
+    int y = box->getY();
+    int z = box->getZ();
+    drawCube(posX, posY, posZ, x, y, z); 
 }
 
 float* Scena::getRandomColor()
@@ -89,24 +123,19 @@ void RenderObjects(void)
 		glRotatef(rotation_x, 0, 1, 0);
 
 		glPushMatrix(); // tacka
-//			glColor3f(1.0, 0.0, 0.0);
 			glColor4f(1.0, 0.0, 0.0, 0.5);
-			glTranslatef(0.0, -1.0, 0.0);
-			rysujFigure(float(allObszar->getSizeX()), 1.0, float(allObszar->getSizeZ()));
+            glTranslatef(0.0, -0.5, 0.0);
+            drawCube(0, 0, 0, allObszar->getSizeX(), 0.5, allObszar->getSizeZ());
 		glPopMatrix(); // tacka
 
 		glPushMatrix();
-			glTranslatef(-float(allObszar->getSizeX()>>1), 0.0, -float(allObszar->getSizeZ()>>1));
 			glTranslatef(0.0, 0.0, 0.0);
-			// prostopad≈Ço≈õciany
 			for (int i = 0; i < allCubsN; i++)
 			{
 				Box* current = allCubs->at(i);
 				glPushMatrix();
 					glColor4f(current->getColor()[0], current->getColor()[1], current->getColor()[2], BOX_ALPHA);
-					glTranslatef(float(current->getPosX()+(current->getX()>>1)), float(current->getPosY()+(current->getY()>>1)), float(current->getPosZ()+(current->getZ()>>1)));
-					//glTranslatef(float(current->getPosX()), float(current->getPosY()), float(current->getPosZ()));
-					rysujFigure(float(current->getX()), float(current->getY()), float(current->getZ()));
+                    drawCube(current);
 				glPopMatrix();
 			}
 		glPopMatrix();
@@ -121,7 +150,7 @@ void display(void)
 
 	// Set up viewing transformation, looking down -Z axis
 	glLoadIdentity();
-	gluLookAt(eye_x, eye_y, -g_fViewDistance, 0, 0, 0, 0, 1, 0);
+	gluLookAt(eye_x, eye_y, -g_fViewDistance, origin_x, origin_y, 0, 0, 1, 0);
 
 	// Set up the stationary light
 	glLightfv(GL_LIGHT0, GL_POSITION, g_lightPos);
@@ -209,16 +238,20 @@ void Keyboard(unsigned char key, int x, int y)
 		glutLeaveMainLoop();
 		break;
 	case 'w':
-		eye_y += step;
+		origin_y += step;
+        eye_y += step;
 		break;
 	case 's':
-		eye_y -= step;
+		origin_y -= step;
+        eye_y -= step;
 		break;
 	case 'a':
-		eye_x += step;
+		origin_x += step;
+        eye_x += step;
 		break;
 	case 'd':
-		eye_x -= step;
+		origin_x -= step;
+        eye_x -= step;
 		break;
 	case '1':
 		if (solvedBoxes[0]!=NULL)

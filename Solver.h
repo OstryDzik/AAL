@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #ifndef SOLVER_H
 #define SOLVER_H
 
@@ -8,11 +14,15 @@
 class Solver
 {
 public:
+    //funkcje wirtualne, implementacja ró¿ni siê w zale¿noœci od klasy solvera
+    virtual int solve() = 0;
+    virtual std::string printShortResult() = 0;
+
 	Solver(Bin* bin);
 	~Solver();
-	virtual int solve() =0;
-	virtual std::string printResult() = 0;
-	virtual std::string printShortResult() = 0;
+
+    double solveWithTimeMeasure();
+    std::string printResult();
 	std::string printSolvedBoxes();
 	void reset();
 	void setBin(Bin* bin);
@@ -32,14 +42,22 @@ public:
 		}
 		return NULL;
 	}
+    int getResultHeight()
+    {
+        if (solved)
+        {
+            return resultHeight;
+        }
+        else return -1;
+    }
 
 protected:
 	bool fitsIntoBin(Box* box);
-	bool collidesWithOtherBoxes(Box* box);
 	void setOptimalHeight(Box* box);
 	bool solved;
 	Bin* bin;
 	int resultHeight;
+    double elapsedTime;
 	std::vector<Box*> unplacedBoxes;
 	std::vector<Box*> placedBoxes;
 };

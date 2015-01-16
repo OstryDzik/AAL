@@ -1,8 +1,13 @@
+/*
+* Autor: Filip Łęczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #include <iostream>
 #include <stdlib.h>
 #include "Box.h"
 
-// Konstruktor, zawiera długości boków
 Box::Box(int a, int b, int c, int ID)
 {
 	setDimens(a, b, c);
@@ -10,7 +15,6 @@ Box::Box(int a, int b, int c, int ID)
 	this->ID = ID;
 }
 
-// Domyślny konstruktor
 Box::Box()
 {
 	setDimens(0, 0, 0);

@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #pragma once
 #include <string>
 #include "Bin.h"
@@ -11,6 +17,7 @@ class FileManager
 public:
 	FileManager();
 	~FileManager();
+
 	//funkcja wczytuje dane z pliku
 	//format pliku jest nastêpuj¹cy:
 	//bin:x,y

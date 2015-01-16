@@ -1,10 +1,19 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #include "Solver.h"
+#include <chrono>
+#include <ctime>
 
 Solver::Solver(Bin* bin)
 {
 	this->bin = bin;
 	this->unplacedBoxes = bin->getUnplacedBoxes();
 	solved = false;
+    elapsedTime = 0;
 }
 
 Solver::~Solver()
@@ -42,12 +51,6 @@ void Solver::setOptimalHeight(Box* box)
 	box->setRotation(Rotation(optimal));
 }
 
-
-bool Solver::collidesWithOtherBoxes(Box* box)
-{
-	return true;
-}
-
 std::string Solver::printSolvedBoxes()
 {
 	std::string result = "Solved bin box arrangement\n";
@@ -76,4 +79,28 @@ void Solver::setBin(Bin* bin)
 {
 	this->bin = bin;
 	reset();
+}
+
+double Solver::solveWithTimeMeasure()
+{
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+    solve();
+    end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsedSeconds = end - start;
+    this->elapsedTime = elapsedSeconds.count();
+    return this->elapsedTime;
+}
+
+std::string Solver::printResult()
+{
+    std::string result;
+    if (!solved)
+    {
+        result = "Not solved yet";
+        return result;
+    }
+    result += printShortResult();
+    result += printSolvedBoxes();
+    return result;
 }

@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Experiment.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="LayerSolver.cpp" />
     <ClCompile Include="main.cpp" />
@@ -78,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="Box.h" />
     <ClInclude Include="Bin.h" />
+    <ClInclude Include="Experiment.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="LayerSolver.h" />
     <ClInclude Include="Scena.h" />

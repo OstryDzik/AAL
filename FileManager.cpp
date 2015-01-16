@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #include "FileManager.h"
 
 
@@ -15,25 +21,27 @@ Bin* FileManager::loadBinFromFile(std::string filename)
 	std::ifstream readFile;
 	readFile.open(filename);
 	Bin* bin = NULL;
-	if (readFile.is_open())
+    if (!readFile.is_open())
+    {
+        return NULL;
+    }
+	std::string line;
+	if (std::getline(readFile, line))
 	{
-		std::string line;
-		if (std::getline(readFile, line))
+		std::stringstream stringLine(line);
+		std::string tmp, tmpX, tmpY;
+		if (std::getline(stringLine, tmp, ':') &&
+			std::getline(stringLine, tmpX, ',') && 
+			std::getline(stringLine, tmpY))
 		{
-			std::stringstream stringLine(line);
-			std::string tmp, tmpX, tmpY;
-			if (std::getline(stringLine, tmp, ':') &&
-				std::getline(stringLine, tmpX, ',') && 
-				std::getline(stringLine, tmpY))
+			if (tmp != "bin")
 			{
-				if (tmp != "bin")
-				{
-					return NULL;
-				}
-				bin = new Bin(std::stoi(tmpX), std::stoi(tmpY));
+				return NULL;
 			}
+			bin = new Bin(std::stoi(tmpX), std::stoi(tmpY));
 		}
 	}
+
 	if (bin!=NULL)
 	{
 		std::string boxLine;
@@ -57,4 +65,17 @@ Bin* FileManager::loadBinFromFile(std::string filename)
 		}
 	}
 	return bin;
+}
+
+bool FileManager::saveToFile(std::string content, std::string fileName)
+{
+    std::ofstream file(fileName, std::ofstream::out);
+    if (!file.is_open())
+    {
+        std::cout << "Nie udalo sie otworzyc pliku";
+        return false;
+    }
+    file << content;
+    file.close();
+    return true;
 }

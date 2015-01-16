@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #ifndef TRIVIALSOLVER_H
 #define TRIVIALSOLVER_H
 
@@ -8,14 +14,11 @@
 class TrivialSolver : public Solver
 {
 public:
-	std::string printResult();
 	std::string printShortResult();
 	TrivialSolver(Bin* bin) : Solver(bin){};
 	int solve();
 private:
-	bool fitsIntoPosition(Position pos, Box* box, int currentHeight);
+	bool fitsIntoPosition(Position pos, Box* box);
 };
-
-
 #endif // TRIVIALSOLVER_H
 

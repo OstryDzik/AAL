@@ -1,3 +1,10 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
+
 #include "ThirdSolver.h"
 
 ThirdSolver::ThirdSolver(Bin* bin) : Solver(bin)
@@ -27,19 +34,7 @@ int ThirdSolver::solve()
 	return resultHeight;
 }
 
-std::string ThirdSolver::printResult()
-{
-	std::string result;
-	if (!solved)
-	{
-		result = "Not solved yet";
-		return result;
-	}
-	result += "Bin solved with Third algorithm: \n";
-	result += "Bin height: " + std::to_string(resultHeight) + "\n";
-	result += printSolvedBoxes();
-	return result;
-}
+
 
 std::string ThirdSolver::printShortResult()
 {
@@ -49,7 +44,8 @@ std::string ThirdSolver::printShortResult()
 		result = "Not solved yet";
 		return result;
 	}
-	result += "Bin solved with Layer algorithm: \n";
+	result += "Bin solved with Third algorithm: \n";
+    result += "Elapsed time: " + std::to_string(elapsedTime) + "\n";
 	result += "Bin height: " + std::to_string(resultHeight) + "\n";
 	return result;
 }
