@@ -95,7 +95,7 @@ void drawCube(Box* box)
     int x = box->getX();
     int y = box->getY();
     int z = box->getZ();
-    drawCube(posX, posY, posZ, x, y, z); 
+	drawCube((float)posX, (float)posY, (float)posZ, (float)x, (float)y, (float)z);
 }
 
 float* Scena::getRandomColor()
@@ -118,14 +118,14 @@ void RenderObjects(void)
 	glMatrixMode(GL_MODELVIEW);
 
 	glPushMatrix(); // skalowanie
-		glScalef(GLOBAL_SCALE,GLOBAL_SCALE,GLOBAL_SCALE);
+	glScalef((GLfloat)GLOBAL_SCALE, (GLfloat)GLOBAL_SCALE, (GLfloat)GLOBAL_SCALE);
 		glRotatef(rotation_y, 1, 0, 0);
 		glRotatef(rotation_x, 0, 1, 0);
 
 		glPushMatrix(); // tacka
 			glColor4f(1.0, 0.0, 0.0, 0.5);
             glTranslatef(0.0, -0.5, 0.0);
-            drawCube(0, 0, 0, allObszar->getSizeX(), 0.5, allObszar->getSizeZ());
+            drawCube(0, 0, 0,(float) allObszar->getSizeX(), 0.5,(float) allObszar->getSizeZ());
 		glPopMatrix(); // tacka
 
 		glPushMatrix();
@@ -134,7 +134,7 @@ void RenderObjects(void)
 			{
 				Box* current = allCubs->at(i);
 				glPushMatrix();
-					glColor4f(current->getColor()[0], current->getColor()[1], current->getColor()[2], BOX_ALPHA);
+					glColor4f(current->getColor()[0], current->getColor()[1], current->getColor()[2],(GLfloat) BOX_ALPHA);
                     drawCube(current);
 				glPopMatrix();
 			}
@@ -200,13 +200,13 @@ void MouseButton(int button, int state, int x, int y)
 	if (button == GLUT_LEFT_BUTTON)
 	{
 		g_bButtonLDown = (state == GLUT_DOWN) ? true : false;
-		g_yClick = y + rotation_y;
-		g_xClick = x - rotation_x;
+		g_yClick = y + (int)rotation_y;
+		g_xClick = x - (int)rotation_x;
 	}
 	else if (button == GLUT_RIGHT_BUTTON)
 	{
 		g_bButtonRDown = (state == GLUT_DOWN) ? true : false;
-		g_yClick = y - ZOOM_SPEED * g_fViewDistance;
+		g_yClick = y - (int)(ZOOM_SPEED * g_fViewDistance);
 	}
 }
 
@@ -216,13 +216,13 @@ void MouseMotion(int x, int y)
 
 	if (g_bButtonLDown)
 	{
-		rotation_x = (x - g_xClick);
-		rotation_y = -(y - g_yClick);
+		rotation_x =(GLfloat) (x - g_xClick);
+		rotation_y = (GLfloat)-(y - g_yClick);
 		glutPostRedisplay();
 	}
 	else if (g_bButtonRDown)
 	{
-		g_fViewDistance = (y - g_yClick) / ZOOM_SPEED;
+		g_fViewDistance = (y - g_yClick) / (GLfloat)ZOOM_SPEED;
 		if (g_fViewDistance < VIEWING_DISTANCE_MIN)
 			g_fViewDistance = VIEWING_DISTANCE_MIN;
 		glutPostRedisplay();
@@ -254,25 +254,25 @@ void Keyboard(unsigned char key, int x, int y)
         eye_x -= step;
 		break;
 	case '1':
-		if (solvedBoxes[0]!=NULL)
-		{
-			allCubs = solvedBoxes[0];
-			allCubsN = allCubs->size();
-			RenderObjects();
-		}
-		break;
-	case '2':
-		if (solvedBoxes[1] != NULL)
+		if (solvedBoxes[1]!=NULL)
 		{
 			allCubs = solvedBoxes[1];
 			allCubsN = allCubs->size();
 			RenderObjects();
 		}
 		break;
-	case '3':
-		if (solvedBoxes[2] != NULL)
+	case '2':
+		if (solvedBoxes[0] != NULL)
 		{
-			allCubs = solvedBoxes[2];
+			allCubs = solvedBoxes[0];
+			allCubsN = allCubs->size();
+			RenderObjects();
+		}
+		break;
+	case '3':
+		if (solvedBoxes[3] != NULL)
+		{
+			allCubs = solvedBoxes[3];
 			allCubsN = allCubs->size();
 			RenderObjects();
 		}
@@ -283,8 +283,8 @@ void Keyboard(unsigned char key, int x, int y)
 
 void Scena::start(int argc, char** argv, Bin* obszar, std::vector<Box*>* packResultTrivial, std::vector<Box*>* packResultLayer, std::vector<Box*>* packResultThird)
 {
-	g_lightPos[0] = -obszar->getSizeX()*2;
-	g_lightPos[2] = -obszar->getSizeZ()*2;
+	g_lightPos[0] = (float)-obszar->getSizeX()*2;
+	g_lightPos[2] = (float)-obszar->getSizeZ()*2;
 	allObszar = obszar;
 	solvedBoxes[0] = packResultTrivial;
 	solvedBoxes[1] = packResultLayer;
@@ -329,7 +329,7 @@ void Scena::start(int argc, char** argv, Bin* obszar, std::vector<Box*>* packRes
 	{
 		if (solvedBoxes[i] != NULL)
 		{
-			for (int j = 0; j < solvedBoxes[i]->size(); j++)
+			for (unsigned int j = 0; j < solvedBoxes[i]->size(); j++)
 			{
 				solvedBoxes[i]->at(j)->setColor(colors.at(solvedBoxes[i]->at(j)->getID()));
 			}

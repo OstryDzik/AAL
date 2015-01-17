@@ -1,5 +1,10 @@
-#include "Experiment.h"
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
 
+#include "Experiment.h"
 
 Experiment::~Experiment()
 {
@@ -20,7 +25,7 @@ void Experiment::run()
     std::string result;
     result += bin->printSize();
     result += "Samples count: " + std::to_string(sampleCount) + "\n";
-    result += "ID | Size | Alg 1 time | Alg 1 size | Alg 2 time | Alg 2 size | Alg 3 time | Alg 3 size\n";
+    result += "ID | Size | TrivialAlg time | TrivialAlg size | LayerAlg time | LayerAlg size | NaiveAlg time | NaiveAlg size\n";
     Solver* trivialSolver = new TrivialSolver(bin);
     Solver* thirdSolver = new ThirdSolver(bin);
     Solver* layerSolver = new LayerSolver(bin);
@@ -36,8 +41,8 @@ void Experiment::run()
         time3 = layerSolver->solveWithTimeMeasure();
         result += std::to_string(i + 1) + "|" + std::to_string(this->sampleSize.at(i)) + "|"
             + std::to_string(time1) + "|" + std::to_string(trivialSolver->getResultHeight()) + "|"
-            + std::to_string(time2) + "|" + std::to_string(thirdSolver->getResultHeight()) + "|"
-            + std::to_string(time3) + "|" + std::to_string(layerSolver->getResultHeight()) + "|" + "\n";
+            + std::to_string(time3) + "|" + std::to_string(layerSolver->getResultHeight()) + "|"
+            + std::to_string(time2) + "|" + std::to_string(thirdSolver->getResultHeight()) + "|" + "\n";
     }
     this->result = result;
 }

@@ -1,3 +1,9 @@
+/*
+* Autor: Filip £êczycki
+*
+* 3D Bin Packing Problem Solver
+*/
+
 #pragma once
 #include <vector>
 #include "Bin.h"

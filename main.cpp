@@ -120,10 +120,11 @@ Bin* loadBin()
 void solveBin(int argc, char** argv, Bin* bin)
 {
 	int alg;
+	std::cout << "# Wyniki zostaną przedstawione w konsoli, przełaczanie wizualizacji odbywa sie klawiszami odpowiednio 1,2,3:" << std::endl;
 	std::cout << "# Wybierz algorytm do rozwiazania problemu:" << std::endl;
 	std::cout << "0 - Wszystkie ponizsze" << std::endl;
-	std::cout << "1 - Algorytm trywialny" << std::endl;
-	std::cout << "2 - Algorytm warstwowy z naiwnym rozmieszczeniem pudelek" << std::endl;
+	std::cout << "1 - Algorytm naiwny" << std::endl;
+	std::cout << "2 - Algorytm warstwowy z 'polkowym' rozmieszczeniem pudelek" << std::endl;
 	std::cout << "3 - Algorytm warstwowy z wykorzystaniem drzewa wolnej przestrzeni" << std::endl << ": ";
 	std::cin >> alg;
 	Solver* trivialSolver = new TrivialSolver(bin);
@@ -172,9 +173,9 @@ void help()
 	std::cout << "- h: pomoc" << std::endl;
 	std::cout << "- r: generowanie danych testowych" << std::endl;
 	std::cout << "- l: wczytanie danych z pliku" << std::endl;
-    std::cout << "- e: generowanie sekwencji danych destowych z zapisem wyników testu do pliku" << std::endl;
+    std::cout << "- e: generowanie sekwencji danych destowych z zapisem wynikow testu do pliku" << std::endl;
 	std::cout << "- p: wypisanie aktualnie wczytanych danych testowych" << std::endl;
-	std::cout << "- s: rozwiazanie problemu z wczytanych danych wejsciowych" << std::endl;
+	std::cout << "- s: rozwiazanie problemu z wczytanych danych testowych" << std::endl;
 	std::cout << "- q: wyjscie" << std::endl;
 }
 
@@ -183,7 +184,7 @@ void help()
  */
 int main(int argc, char** argv)
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	std::string command = "h";
 	std::cout << LINE << "Filip Leczycki - projekt z przedmiotu AAL\n" << LINE;
