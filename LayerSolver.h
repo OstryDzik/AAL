@@ -34,6 +34,7 @@ private:
     int fitIntoSpaceMaxSurface(Box* box, Space space); //funkcja podejmuje próbê dopasowania pude³ka do wolnego miejsca ( obróconego tak, by podstawa mia³a jak najwiêksz¹ powierzchniê)
 	Node* insert(Box* box, Node* node); // funkcja próbuje umieœcic pude³ko na warstwie
 	void clearNode(Node* node);
+	void findBestRot(Box* box);
 	void resetRoot();
 	int solveLayer();
 	Node root;

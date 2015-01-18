@@ -76,4 +76,4 @@ private:
 	std::vector<Box*> unplacedBoxes;
 };
 
-#endif /* OBSZAR_H */
+#endif /* BIN_H */

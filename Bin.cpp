@@ -60,7 +60,7 @@ void Bin::generate(int N, int minA, int maxA)
 
 void Bin::clear(std::vector<Box*>* boxes)
 {
-		boxes->clear();
+	boxes->clear();
 }
 
 void Bin::reset()

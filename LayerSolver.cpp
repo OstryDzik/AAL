@@ -19,50 +19,39 @@ LayerSolver::LayerSolver(Bin* bin) : Solver(bin)
 	resultHeight = 0;
 }
 
-
-int LayerSolver::fitIntoSpace(Box* box, Space space)
-{
-	if (box->getMinSurface() > space.getSurface())
-	{
-		return -1;
-	}
-	int bestRot = ROTATION_0;
-	int surfaceLeft = -1;
-	for (int rot = ROTATION_0; rot <= ROTATION_5; rot++)
-	{
-		box->setRotation(Rotation(rot));
-		if (box->getSurface()<=space.getSurface() && box->getX() <= space.getWidth() && box->getZ() <= space.getLength())
-		{
-			if (surfaceLeft == -1 || surfaceLeft>space.getSurface() - box->getSurface())
-			{
-				surfaceLeft = space.getSurface() - box->getSurface();
-				bestRot = rot;
-			}
-		}
-	}
-	box->setRotation((Rotation)bestRot);
-	return surfaceLeft;
-}
+////Different evaluation function
+//int LayerSolver::fitIntoSpace(Box* box, Space space)
+//{
+//	if (box->getMinSurface() > space.getSurface())
+//	{
+//		return -1;
+//	}
+//	int bestRot = ROTATION_0;
+//	int surfaceLeft = -1;
+//	for (int rot = ROTATION_0; rot <= ROTATION_5; rot++)
+//	{
+//		box->setRotation(Rotation(rot));
+//		if (box->getSurface()<=space.getSurface() && box->getX() <= space.getWidth() && box->getZ() <= space.getLength())
+//		{
+//			if (surfaceLeft == -1 || surfaceLeft>space.getSurface() - box->getSurface())
+//			{
+//				surfaceLeft = space.getSurface() - box->getSurface();
+//				bestRot = rot;
+//			}
+//		}
+//	}
+//	box->setRotation((Rotation)bestRot);
+//	return surfaceLeft;
+//}
 
 int LayerSolver::fitIntoSpaceMaxSurface(Box* box, Space space)
 {
-    if (box->getMinSurface() > space.getSurface())
+	comparisonCount++;
+	if (box->getMinSurface() > space.getSurface())
     {
         return -1;
     }
-    int bestRot = ROTATION_0;
     int surfaceLeft = -1;
-    int boxSurface = 0;
-    for (int rot = ROTATION_0; rot <= ROTATION_5; rot++)
-    {
-        box->setRotation(Rotation(rot));
-        if (box->getSurface() > boxSurface)
-        {
-            boxSurface = box->getSurface();
-            bestRot = rot;       
-        }
-    }
-    box->setRotation((Rotation)bestRot);
     if (box->getSurface() <= space.getSurface() && box->getX() <= space.getWidth() && box->getZ() <= space.getLength())
     {
         surfaceLeft = space.getSurface() - box->getSurface();
@@ -180,6 +169,10 @@ int LayerSolver::solve()
 	{
 		return -1;
 	}
+	for (int i = 0; i < unplacedBoxes.size(); i++)
+	{
+		findBestRot(unplacedBoxes.at(i));
+	}
 	while (unplacedBoxes.size()!=0)
 	{
 		resultHeight += solveLayer();
@@ -198,7 +191,7 @@ std::string LayerSolver::printShortResult()
 		result = "Not solved yet";
 		return result;
 	}
-	result += "Bin solved with Layer algorithm: \n";
+	result += "Bin solved with Tree algorithm: \n";
     result += "Elapsed time: " + std::to_string(elapsedTime) + "\n";
 	result += "Bin height: " + std::to_string(resultHeight) +"\n";
 	return result;
@@ -207,4 +200,20 @@ std::string LayerSolver::printShortResult()
 LayerSolver::~LayerSolver()
 {
 	resetRoot();
+}
+
+void LayerSolver::findBestRot(Box* box)
+{
+	int bestRot = ROTATION_0;
+	int boxSurface = 0;
+	for (int rot = ROTATION_0; rot <= ROTATION_5; rot++)
+	{
+		box->setRotation(Rotation(rot));
+		if (box->getSurface() > boxSurface)
+		{
+			boxSurface = box->getSurface();
+			bestRot = rot;
+		}
+	}
+	box->setRotation((Rotation)bestRot);
 }

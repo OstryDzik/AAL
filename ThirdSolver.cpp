@@ -44,7 +44,7 @@ std::string ThirdSolver::printShortResult()
 		result = "Not solved yet";
 		return result;
 	}
-	result += "Bin solved with Third algorithm: \n";
+	result += "Bin solved with Naive algorithm: \n";
     result += "Elapsed time: " + std::to_string(elapsedTime) + "\n";
 	result += "Bin height: " + std::to_string(resultHeight) + "\n";
 	return result;

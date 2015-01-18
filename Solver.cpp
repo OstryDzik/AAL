@@ -29,6 +29,7 @@ Solver::~Solver()
 
 bool Solver::fitsIntoBin(Box* box)
 {
+	comparisonCount++;
 	if (box->getPosX() + box->getX() <= bin->getSizeX() && box->getPosZ() + box->getZ() <= bin->getSizeZ())
 		return true;
 	return false;
@@ -72,6 +73,7 @@ void Solver::reset()
 	}
 	placedBoxes.clear();
 	resultHeight = 0;
+	comparisonCount = 0;
 	unplacedBoxes = bin->getUnplacedBoxes();
 }
 

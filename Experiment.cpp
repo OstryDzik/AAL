@@ -22,27 +22,41 @@ Experiment::Experiment(int sampleCount, std::vector<int> sampleSize, int binSize
 
 void Experiment::run()
 {
+	std::sort(sampleSize.begin(), sampleSize.end());
+	if (sampleSize.size()%2==1)
+	{
+		int median =sampleSize.at((sampleSize.size() - 1) / 2 + 1); //srodkowa wartosc posortowanego wektora
+	}
+	else
+	{
+		int median = sampleSize.at(sampleSize.size() / 2);
+	}
+
     std::string result;
     result += bin->printSize();
     result += "Samples count: " + std::to_string(sampleCount) + "\n";
-    result += "ID | Size | TrivialAlg time | TrivialAlg size | LayerAlg time | LayerAlg size | NaiveAlg time | NaiveAlg size\n";
+    result += "ID|Size|ShelfAlg time|ShelfAlg Op Count|ShelfAlg H|LayerAlg time|LayerAlg Op Count|LayerAlg H|NaiveAlg time|NaiveAlg Op Count|NaiveAlg H\n";
     Solver* trivialSolver = new TrivialSolver(bin);
     Solver* thirdSolver = new ThirdSolver(bin);
     Solver* layerSolver = new LayerSolver(bin);
-    double time1, time2, time3;
+    double timeTrivial, timeThird, timeLayer;
+	int opCountTrivial, opCountThird, opCountLayer;
     for (int i = 0; i < sampleCount; i++)
     {
         bin->generate(this->sampleSize.at(i), this->minSize, this->maxSize);
-        trivialSolver->setBin(bin);
-        thirdSolver->setBin(bin);
-        layerSolver->setBin(bin);
-        time1 = trivialSolver->solveWithTimeMeasure();
-        time2 = thirdSolver->solveWithTimeMeasure();
-        time3 = layerSolver->solveWithTimeMeasure();
+        trivialSolver->setBin(bin); //shelf
+        thirdSolver->setBin(bin); //naive
+        layerSolver->setBin(bin); //layer
+        timeTrivial = trivialSolver->solveWithTimeMeasure()*1000;
+        timeThird = thirdSolver->solveWithTimeMeasure()*1000;
+        timeLayer = layerSolver->solveWithTimeMeasure()*1000;
+		opCountLayer = layerSolver->getComparisonCount();
+		opCountThird = thirdSolver->getComparisonCount();
+		opCountTrivial = trivialSolver->getComparisonCount();
         result += std::to_string(i + 1) + "|" + std::to_string(this->sampleSize.at(i)) + "|"
-            + std::to_string(time1) + "|" + std::to_string(trivialSolver->getResultHeight()) + "|"
-            + std::to_string(time3) + "|" + std::to_string(layerSolver->getResultHeight()) + "|"
-            + std::to_string(time2) + "|" + std::to_string(thirdSolver->getResultHeight()) + "|" + "\n";
+			+ std::to_string(timeTrivial) + "|" + std::to_string(opCountTrivial) + "|" + std::to_string(trivialSolver->getResultHeight()) + "|"
+			+ std::to_string(timeLayer) + "|" + std::to_string(opCountLayer) + std::to_string(layerSolver->getResultHeight()) + "|"
+			+ std::to_string(timeThird) + "|" + std::to_string(opCountThird) + std::to_string(thirdSolver->getResultHeight()) + "|" + "\n";
     }
     this->result = result;
 }

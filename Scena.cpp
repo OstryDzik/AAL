@@ -270,9 +270,9 @@ void Keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case '3':
-		if (solvedBoxes[3] != NULL)
+		if (solvedBoxes[2] != NULL)
 		{
-			allCubs = solvedBoxes[3];
+			allCubs = solvedBoxes[2];
 			allCubsN = allCubs->size();
 			RenderObjects();
 		}

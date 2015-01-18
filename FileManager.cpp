@@ -41,7 +41,7 @@ Bin* FileManager::loadBinFromFile(std::string filename)
 			bin = new Bin(std::stoi(tmpX), std::stoi(tmpY));
 		}
 	}
-
+	//wczytywanie pude³ek je¿eli uda³o siê wczytaæ kosz
 	if (bin!=NULL)
 	{
 		std::string boxLine;

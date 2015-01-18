@@ -50,13 +50,21 @@ public:
         }
         else return -1;
     }
-
+	int getComparisonCount()
+	{
+		if (solved)
+		{
+			return comparisonCount;
+		}
+		else return -1;
+	}
 protected:
 	bool fitsIntoBin(Box* box);
 	void setOptimalHeight(Box* box);
 	bool solved;
 	Bin* bin;
 	int resultHeight;
+	int comparisonCount;
     double elapsedTime;
 	std::vector<Box*> unplacedBoxes;
 	std::vector<Box*> placedBoxes;

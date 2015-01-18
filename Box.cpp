@@ -40,6 +40,7 @@ void Box::setDimens(int a, int b, int c)
 	this->y = b;
 	this->z = c;
 	this->volume = a*b*c;
+	//wyznaczanie powierzchni najmniejszej sciany pudelka
 	if (x*y <= y*z && x*y <=x*z)
 	{
 		this->minSurface = x*y;

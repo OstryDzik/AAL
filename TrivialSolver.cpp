@@ -22,6 +22,10 @@ int TrivialSolver::solve()
     int furthestPoint = 0;
     int placedOnShelf = 0;
 	int i = 0;
+	for (int j = 0; j < unplacedBoxes.size(); j++)
+	{
+		setOptimalHeight(unplacedBoxes.at(j));
+	}
     while (unplacedBoxes.size()!=0)
 	{
 		if (i>unplacedBoxes.size()-1) // odciêcie warstwy, powrót do punktu 0,y,0
@@ -52,7 +56,7 @@ int TrivialSolver::solve()
 		Box* current = new Box(this->unplacedBoxes.at(i));	
 		if (this->fitsIntoPosition(placingPos, current)) //jezeli klocek zmiesci siê do koszyka
 		{
-			if (yPos < current->getPosY()+current->getY()) //jezeli klocek jest pierwszy w nowej warstwie zwiêkszamy limit wysokosci
+			if (yPos < current->getPosY()+current->getY()) //jezeli klocek jest pierwszy w nowej warstwie zwiêkszamy aktualna wysokosc
 			{
                 yPos = current->getPosY() + current->getY();
 			}
@@ -96,7 +100,6 @@ int TrivialSolver::solve()
 bool TrivialSolver::fitsIntoPosition(Position pos, Box* box)
 {
 	box->setPos(pos);
-	setOptimalHeight(box);
 	if (!fitsIntoBin(box))
 	{
 		return false;
@@ -114,7 +117,7 @@ std::string TrivialSolver::printShortResult()
 		result = "Not solved yet";
 		return result;
 	}
-	result += "Bin solved with trivial algorithm: \n";
+	result += "Bin solved with shelf algorithm: \n";
     result += "Elapsed time: " + std::to_string(elapsedTime) + "\n";
 	result += "Bin height: " + std::to_string(bin->getSizeY()) +"\n";
 	return result;
