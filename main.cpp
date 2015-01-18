@@ -36,15 +36,46 @@
 #include <ctime>
 #include "Scena.h"
 #include "Bin.h"
-#include "TrivialSolver.h"
+#include "ShelfSolver.h"
 #include "LayerSolver.h"
-#include "ThirdSolver.h"
+#include "NaiveSolver.h"
 #include "FileManager.h"
 #include "Experiment.h"
 
+Experiment* loadExperiment()
+{
+	std::string fileName;
+	std::cout << "# Podaj nazwe pliku" << std::endl << ": ";
+	std::cin >> fileName;
+	return FileManager::loadExperimentFromFile(fileName);
+}
 
+void runExperimentFromFile()
+{
+	Experiment* exp = loadExperiment();
+	if (exp==NULL)
+	{
+		std::cout << "Nie udalo sie wczytac danych\n";
+		return;
+	}
+	exp->run();
+	std::string saveFile;
+	std::string fileName;
+	std::cout << "# Zapisac wynik do pliku? Y/N" << std::endl << ": ";
+	std::cin >> saveFile;
+	if (saveFile == "Y" || saveFile == "y")
+	{
+		std::cout << "# Podaj nazwe pliku" << std::endl << ": ";
+		std::cin >> fileName;
+		exp->printResult(fileName);
+	}
+	else
+	{
+		exp->printResult();
+	}
+}
 
-void runExperiment()
+void runExperimentManual()
 {
     std::vector<int> resultsSize;
     int count, obszarX, obszarZ, minA, maxA, size;
@@ -117,6 +148,8 @@ Bin* loadBin()
 	return FileManager::loadBinFromFile(fileName);
 }
 
+
+
 void solveBin(int argc, char** argv, Bin* bin)
 {
 	int alg;
@@ -127,8 +160,8 @@ void solveBin(int argc, char** argv, Bin* bin)
 	std::cout << "2 - Algorytm warstwowy z 'polkowym' rozmieszczeniem pudelek" << std::endl;
 	std::cout << "3 - Algorytm warstwowy z wykorzystaniem drzewa wolnej przestrzeni" << std::endl << ": ";
 	std::cin >> alg;
-	Solver* trivialSolver = new TrivialSolver(bin);
-	Solver* thirdSolver = new ThirdSolver(bin);
+	Solver* trivialSolver = new ShelfSolver(bin);
+	Solver* thirdSolver = new NaiveSolver(bin);
 	Solver* layerSolver = new LayerSolver(bin);
 	if (alg == 0)
 	{
@@ -173,7 +206,8 @@ void help()
 	std::cout << "- h: pomoc" << std::endl;
 	std::cout << "- r: generowanie danych testowych" << std::endl;
 	std::cout << "- l: wczytanie danych z pliku" << std::endl;
-    std::cout << "- e: generowanie sekwencji danych destowych z zapisem wynikow testu do pliku" << std::endl;
+    std::cout << "- em: przeprowadzenie eksperymentu - reczne wprwadzanie danych" << std::endl;
+	std::cout << "- ef: przeprowadzenie eksperymentu - dane z pliku" << std::endl;
 	std::cout << "- p: wypisanie aktualnie wczytanych danych testowych" << std::endl;
 	std::cout << "- s: rozwiazanie problemu z wczytanych danych testowych" << std::endl;
 	std::cout << "- q: wyjscie" << std::endl;
@@ -199,10 +233,14 @@ int main(int argc, char** argv)
 		{
 			bin = generateData(argc, argv);
 		}
-        else if (command == "e")
+        else if (command == "em")
         {
-            runExperiment();
+            runExperimentManual();
         }
+		else if (command == "ef")
+		{
+			runExperimentFromFile();
+		}
 		else if (command == "l")
 		{
 			bin = loadBin();

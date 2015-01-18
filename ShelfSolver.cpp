@@ -4,9 +4,9 @@
 * 3D Bin Packing Problem Solver
 */
 
-#include "TrivialSolver.h"
+#include "ShelfSolver.h"
 
-int TrivialSolver::solve()
+int ShelfSolver::solve()
 {
 	reset();
 	if (bin == NULL || unplacedBoxes.empty())
@@ -21,8 +21,8 @@ int TrivialSolver::solve()
 	placingPos.z = 0;
     int furthestPoint = 0;
     int placedOnShelf = 0;
-	int i = 0;
-	for (int j = 0; j < unplacedBoxes.size(); j++)
+	unsigned int i = 0;
+	for (unsigned int j = 0; j < unplacedBoxes.size(); j++)
 	{
 		setOptimalHeight(unplacedBoxes.at(j));
 	}
@@ -97,7 +97,7 @@ int TrivialSolver::solve()
 }
 
 
-bool TrivialSolver::fitsIntoPosition(Position pos, Box* box)
+bool ShelfSolver::fitsIntoPosition(Position pos, Box* box)
 {
 	box->setPos(pos);
 	if (!fitsIntoBin(box))
@@ -109,7 +109,7 @@ bool TrivialSolver::fitsIntoPosition(Position pos, Box* box)
 
 
 
-std::string TrivialSolver::printShortResult()
+std::string ShelfSolver::printShortResult()
 {
 	std::string result;
 	if (!solved)

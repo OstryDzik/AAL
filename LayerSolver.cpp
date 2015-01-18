@@ -141,7 +141,7 @@ int LayerSolver::solveLayer()
 {
 	resetRoot(); // czysci drzewo, zaczynamy od pustej warstwy
 	int topHeight = 0;
-	for (int i = 0; i < unplacedBoxes.size(); i++)
+	for (unsigned int i = 0; i < unplacedBoxes.size(); i++)
 	{
 		Box* currentBox = new Box(unplacedBoxes.at(i));
 		Node* currentNode = (insert(currentBox, &root));
@@ -169,7 +169,7 @@ int LayerSolver::solve()
 	{
 		return -1;
 	}
-	for (int i = 0; i < unplacedBoxes.size(); i++)
+	for (unsigned int i = 0; i < unplacedBoxes.size(); i++)
 	{
 		findBestRot(unplacedBoxes.at(i));
 	}

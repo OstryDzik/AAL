@@ -5,15 +5,15 @@
 */
 
 
-#include "ThirdSolver.h"
+#include "NaiveSolver.h"
 
-ThirdSolver::ThirdSolver(Bin* bin) : Solver(bin)
+NaiveSolver::NaiveSolver(Bin* bin) : Solver(bin)
 {
 
 }
 
 
-int ThirdSolver::solve()
+int NaiveSolver::solve()
 {
 	reset();
 	if (bin == NULL || unplacedBoxes.empty())
@@ -36,7 +36,7 @@ int ThirdSolver::solve()
 
 
 
-std::string ThirdSolver::printShortResult()
+std::string NaiveSolver::printShortResult()
 {
 	std::string result;
 	if (!solved)

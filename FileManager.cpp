@@ -79,3 +79,72 @@ bool FileManager::saveToFile(std::string content, std::string fileName)
     file.close();
     return true;
 }
+
+Experiment* FileManager::loadExperimentFromFile(std::string fileName)
+{
+	std::ifstream readFile;
+	readFile.open(fileName);
+	std::vector<int>sampleSize;
+	int boxMax;
+	int boxMin;
+	int binX;
+	int binY;
+
+	if (!readFile.is_open())
+	{
+		return NULL;
+	}
+	std::string line;
+	std::getline(readFile, line);
+	std::stringstream header(line);
+	std::string controlHeader;
+	if (std::getline(header,controlHeader))
+	{
+		if (controlHeader!="Experiment")
+		{
+			return NULL;
+		}
+	}
+	if (std::getline(readFile, line))
+	{
+		std::stringstream stringLine(line);
+		std::string tmp, tmpX, tmpY;
+		if (std::getline(stringLine, tmp, ':') &&
+			std::getline(stringLine, tmpX, ',') &&
+			std::getline(stringLine, tmpY))
+		{
+			if (tmp != "bin")
+			{
+				return NULL;
+			}
+			binX = std::stoi(tmpX);
+			binY = std::stoi(tmpY);
+		}
+	}
+	if (std::getline(readFile, line))
+	{
+		std::stringstream stringLine(line);
+		std::string tmp, tmpX, tmpY;
+		if (std::getline(stringLine, tmp, ':') &&
+			std::getline(stringLine, tmpX, ',') &&
+			std::getline(stringLine, tmpY))
+		{
+			if (tmp != "box")
+			{
+				return NULL;
+			}
+			boxMax = std::stoi(tmpX);
+			boxMin = std::stoi(tmpY);
+		}
+	}
+	while (std::getline(readFile,line))
+	{
+		std::stringstream stringLine(line);
+		std::string tmp;
+		if (std::getline(stringLine, tmp))
+		{
+			sampleSize.push_back(std::stoi(tmp));
+		}
+	}
+	return new Experiment(sampleSize.size(), sampleSize, binX, binY, boxMax, boxMin);
+}

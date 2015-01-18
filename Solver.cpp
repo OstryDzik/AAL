@@ -18,7 +18,7 @@ Solver::Solver(Bin* bin)
 
 Solver::~Solver()
 {
-	for (int i = 0; i < placedBoxes.size(); i++)
+	for (unsigned int i = 0; i < placedBoxes.size(); i++)
 	{
 		delete placedBoxes.at(i);
 	}
@@ -58,7 +58,7 @@ std::string Solver::printSolvedBoxes()
 	result += ("Bin foot size: " + std::to_string(bin->getSizeX()) + "," + std::to_string(bin->getSizeZ()) + "\n");
 	result += ("Bin height: " + std::to_string(this->resultHeight) + "\n");
 	result += ("##################################################\n");
-	for (int i = 0; i < this->placedBoxes.size(); i++)
+	for (unsigned int i = 0; i < this->placedBoxes.size(); i++)
 	{
 		result += placedBoxes.at(i)->printBox();
 	}
@@ -67,7 +67,7 @@ std::string Solver::printSolvedBoxes()
 
 void Solver::reset()
 {
-	for (int i = 0; i < placedBoxes.size(); i++)
+	for (unsigned int i = 0; i < placedBoxes.size(); i++)
 	{
 		delete placedBoxes.at(i);
 	}
@@ -85,12 +85,13 @@ void Solver::setBin(Bin* bin)
 
 double Solver::solveWithTimeMeasure()
 {
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
+	std::clock_t start;
+	long double duration;
+	start = std::clock();
     solve();
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsedSeconds = end - start;
-    this->elapsedTime = elapsedSeconds.count();
+	duration = (std::clock() - start); // (double)CLOCKS_PER_SEC * 1000;
+
+	this->elapsedTime = duration;
     return this->elapsedTime;
 }
 

@@ -35,28 +35,28 @@ void Experiment::run()
     std::string result;
     result += bin->printSize();
     result += "Samples count: " + std::to_string(sampleCount) + "\n";
-    result += "ID|Size|ShelfAlg time|ShelfAlg Op Count|ShelfAlg H|LayerAlg time|LayerAlg Op Count|LayerAlg H|NaiveAlg time|NaiveAlg Op Count|NaiveAlg H\n";
-    Solver* trivialSolver = new TrivialSolver(bin);
-    Solver* thirdSolver = new ThirdSolver(bin);
+    result += "ID|Size|ShelfAlg time|ShelfAlg H|LayerAlg time|LayerAlg H|NaiveAlg time|NaiveAlg H\n";
+    Solver* shelfSolver = new ShelfSolver(bin);
+    Solver* naiveSolver = new NaiveSolver(bin);
     Solver* layerSolver = new LayerSolver(bin);
-    double timeTrivial, timeThird, timeLayer;
-	int opCountTrivial, opCountThird, opCountLayer;
+    double timeShelf, timeNaive, timeLayer;
+	int opCountShelf, opCountNaive, opCountLayer;
     for (int i = 0; i < sampleCount; i++)
     {
         bin->generate(this->sampleSize.at(i), this->minSize, this->maxSize);
-        trivialSolver->setBin(bin); //shelf
-        thirdSolver->setBin(bin); //naive
+        shelfSolver->setBin(bin); //shelf
+        naiveSolver->setBin(bin); //naive
         layerSolver->setBin(bin); //layer
-        timeTrivial = trivialSolver->solveWithTimeMeasure()*1000;
-        timeThird = thirdSolver->solveWithTimeMeasure()*1000;
+        timeShelf = shelfSolver->solveWithTimeMeasure()*1000;
+        timeNaive = naiveSolver->solveWithTimeMeasure()*1000;
         timeLayer = layerSolver->solveWithTimeMeasure()*1000;
 		opCountLayer = layerSolver->getComparisonCount();
-		opCountThird = thirdSolver->getComparisonCount();
-		opCountTrivial = trivialSolver->getComparisonCount();
+		opCountNaive = naiveSolver->getComparisonCount();
+		opCountShelf = shelfSolver->getComparisonCount();
         result += std::to_string(i + 1) + "|" + std::to_string(this->sampleSize.at(i)) + "|"
-			+ std::to_string(timeTrivial) + "|" + std::to_string(opCountTrivial) + "|" + std::to_string(trivialSolver->getResultHeight()) + "|"
-			+ std::to_string(timeLayer) + "|" + std::to_string(opCountLayer) + std::to_string(layerSolver->getResultHeight()) + "|"
-			+ std::to_string(timeThird) + "|" + std::to_string(opCountThird) + std::to_string(thirdSolver->getResultHeight()) + "|" + "\n";
+			+ std::to_string(timeShelf) + "|" + std::to_string(shelfSolver->getResultHeight()) + "|"
+			+ std::to_string(timeLayer) + "|" + std::to_string(layerSolver->getResultHeight()) + "|"
+			+ std::to_string(timeNaive) + "|" + std::to_string(naiveSolver->getResultHeight()) + "|" + "\n";
     }
     this->result = result;
 }

@@ -4,21 +4,20 @@
 * 3D Bin Packing Problem Solver
 */
 
-#ifndef TRIVIALSOLVER_H
-#define TRIVIALSOLVER_H
+#pragma once
 
 #include <iostream>
 #include <vector>
 #include "Solver.h"
 
-class TrivialSolver : public Solver
+class ShelfSolver : public Solver
 {
 public:
 	std::string printShortResult();
-	TrivialSolver(Bin* bin) : Solver(bin){};
+	ShelfSolver(Bin* bin) : Solver(bin){};
 	int solve();
 private:
 	bool fitsIntoPosition(Position pos, Box* box);
 };
-#endif // TRIVIALSOLVER_H
+
 

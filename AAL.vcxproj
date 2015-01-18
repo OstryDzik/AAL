@@ -73,8 +73,8 @@
     <ClCompile Include="Scena.cpp" />
     <ClCompile Include="Solver.cpp" />
     <ClCompile Include="Space.cpp" />
-    <ClCompile Include="ThirdSolver.cpp" />
-    <ClCompile Include="TrivialSolver.cpp" />
+    <ClCompile Include="NaiveSolver.cpp" />
+    <ClCompile Include="ShelfSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
@@ -85,8 +85,8 @@
     <ClInclude Include="Scena.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="Space.h" />
-    <ClInclude Include="ThirdSolver.h" />
-    <ClInclude Include="TrivialSolver.h" />
+    <ClInclude Include="NaiveSolver.h" />
+    <ClInclude Include="ShelfSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

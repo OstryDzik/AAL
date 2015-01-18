@@ -4,19 +4,17 @@
 * 3D Bin Packing Problem Solver
 */
 
-#ifndef THIRDSOLVER_H
-#define THIRDSOLVER_H
+#pragma once
 
 #include "Solver.h"
 
-class ThirdSolver : public Solver
+class NaiveSolver : public Solver
 {
 public:
-	ThirdSolver(Bin* bin);
-	~ThirdSolver();
+	NaiveSolver(Bin* bin);
+	~NaiveSolver();
 	int solve();
 	std::string printShortResult();
 };
 
-#endif
 

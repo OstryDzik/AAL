@@ -9,8 +9,8 @@
 #include "Bin.h"
 #include "Solver.h"
 #include "LayerSolver.h"
-#include "ThirdSolver.h"
-#include "TrivialSolver.h"
+#include "NaiveSolver.h"
+#include "ShelfSolver.h"
 #include "FileManager.h"
 
 class Experiment
